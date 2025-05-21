@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Socket.IO WebTransport example</title>
+  </head>
+  <body>
+    <p>Status: <span id="status">Disconnected</span></p>
+    <p>Transport: <span id="transport">N/A</span></p>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const $status = document.getElementById("status");
+      const $transport = document.getElementById("transport");
+
+      const socket = io({
+        transportOptions: {
+          webtransport: {
+            hostname: "127.0.0.1"
+          }
+        }
+      });
+
+      socket.on("connect", () => {
+        console.log(`connected with transport ${socket.io.engine.transport.name}`);
+
+        $status.innerText = "Connected";
+        $transport.innerText = socket.io.engine.transport.name;
+
+        socket.io.engine.on("upgrade", (transport) => {
+          console.log(`transport upgraded to ${transport.name}`);
+
+          $transport.innerText = transport.name;
+        });
+      });
+
+      let start = 0;
+      let end = 0;
+      let total = 0;
+      let counter = 0;
+      let send = true;
+      //Send messages to server. 
+      const send_loop = async () => {
+        await sleep(3000);
+        while (counter != 1000) {
+          
+          
+          //Check if response has arrived.
+          if (start == 0) {
+            //Start timer for packet when sending.
+            start = performance.now();
+            socket.emit('chat message', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+            counter++;
+          }
+          
+          await sleep(500);
+
+          
+                   
+        }
+        
+      } 
+      
+      send_loop();
+
+      function sleep(time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+      }
+
+      socket.on('response', (msg, serverOffset) => {
+        
+        //End timer for packet when receiving back the message.
+        end = performance.now();
+        let time = end - start;
+        total += (end - start);
+        console.log('time: ' + time);
+        start = 0;
+        end = 0;
+        //Print total average if all messages are sent.
+        if (counter == 1000) {
+          total = total/1000;
+          console.log('total average: ' + total);
+        }
+      });
+
+      socket.on("connect_error", (err) => {
+        console.log(`connect_error due to ${err.message}`);
+      });
+
+      socket.on("disconnect", (reason) => {
+        console.log(`disconnect due to ${reason}`);
+
+        $status.innerText = "Disconnected";
+        $transport.innerText = "N/A";
+      });
+    </script>
+  </body>
+</html>

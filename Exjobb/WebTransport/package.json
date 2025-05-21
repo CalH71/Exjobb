@@ -1,0 +1,12 @@
+{
+    "name": "Packet loss experiment",
+    "version": "0.0.1",
+    "description": "Experiment for packet loss and packet size correlation.",
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "@fails-components/webtransport": "^1.2.1",
+        "@fails-components/webtransport-transport-http3-quiche": "^1.2.1",
+        "socket.io": "^4.8.1"
+    }
+}
