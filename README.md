@@ -1,13 +1,12 @@
 The contents on this Git is for my bachelor thesis in computer science. The code is made using the Socket.IO tutorials for WebSocket and WebTransport (with permission of the MIT license).
-The files have been modified to execute the experiments. 
+The files have been modified to execute the experiments. How to run the code is presented below. 
 
-To run the code
-WebSocket
+#WebSocket
 1. Navigate to the folder.
 2. Run "node index.js"
 3. The server is then running in the terminal, and cliking the link the terminal privdes opens a broswer which will host the client.
 
-WebTransport
+#WebTransport
 1. Navigate to the folder.
 2. Run "node index.js"
 3. The server will be running in the terminal.
