@@ -1,0 +1,13 @@
+{
+	"name": "Packet loss experiment",
+	"version": "0.0.1",
+	"description": "Experiment on packet size and packet loss correlation.",
+	"type": "commonjs",
+	"dependencies": {
+		"3": "^2.1.0",
+		"express": "^4.21.2",
+		"socket.io": "^4.8.1",
+		"sqlite": "^5.1.1",
+		"sqlite3": "^5.1.7"
+	}
+}
